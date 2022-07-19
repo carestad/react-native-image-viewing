@@ -16,6 +16,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   NativeMethodsMixin,
+  GestureResponderEvent,
 } from "react-native";
 
 import useImageDimensions from "../../hooks/useImageDimensions";
@@ -35,7 +36,7 @@ type Props = {
   imageSrc: ImageSource;
   onRequestClose: () => void;
   onZoom: (isZoomed: boolean) => void;
-  onLongPress: (image: ImageSource) => void;
+  onLongPress: (event: GestureResponderEvent, image: ImageSource) => void;
   delayLongPress: number;
   swipeToCloseEnabled?: boolean;
   doubleTapToZoomEnabled?: boolean;
@@ -69,9 +70,12 @@ const ImageItem = ({
     [imageContainer]
   );
 
-  const onLongPressHandler = useCallback(() => {
-    onLongPress(imageSrc);
-  }, [imageSrc, onLongPress]);
+  const onLongPressHandler = useCallback(
+    (event: GestureResponderEvent) => {
+      onLongPress(event, imageSrc);
+    },
+    [imageSrc, onLongPress]
+  );
 
   const [panHandlers, scaleValue, translateValue] = usePanResponder({
     initialScale: scale || 1,
